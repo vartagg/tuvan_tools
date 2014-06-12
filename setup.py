@@ -23,9 +23,6 @@ setup(
     author='Vladimir Chub',
     author_email='vartagg@users.noreply.github.com',
     url='https://github.com/vartagg/tuvan_tools',
-    packages=[
-        'tuvan_tools',
-    ],
     py_modules=['tuvan_tools'],
     include_package_data=True,
     license="BSD",
