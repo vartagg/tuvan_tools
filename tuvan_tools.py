@@ -8,7 +8,7 @@
 # Author: Vladimir Chub
 
 """
-TUVAN TOOLS. Yet another python toolkit.
+TUVAN TOOLS. Yet another python toolkit. ;]
 """
 
 __author__ = 'Vladimir Chub'
@@ -122,6 +122,33 @@ def chunks(l, n):
     for i in xrange(0, len(l), n):
         yield l[i:i+n]
 
+
+def weighted_choice(values_list, weights_list):
+    """
+    Returns the weighted choice from list.
+    Each element of weights_list corresponds to each element of values_list with a same index
+
+    >>> vl = ['chicken', 'egg', 'philosopher_stone']
+    >>> wl = [1000000, 1000, 1]
+    >>> vd = {i: 0 for i in vl}
+    >>> for i in range(10000):
+    ...     value = weighted_choice(vl, wl)
+    ...     vd[value] += 1
+    >>> vd['chicken'] > vd['egg'] > vd['philosopher_stone']
+    True
+    """
+    from random import random
+    assert len(values_list) == len(weights_list), 'Length of values_list must be equal to length of weights_list'
+    totals = []
+    running_total = 0
+    for w in weights_list:
+        running_total += w
+        totals.append(running_total)
+
+    rnd = random() * running_total
+    for i, total in enumerate(totals):
+        if rnd < total:
+            return values_list[i]
 
 if __name__ == '__main__':
     import doctest
