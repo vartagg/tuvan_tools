@@ -16,6 +16,9 @@ __email__ = 'vartagg@users.noreply.github.com'
 __version__ = '0.1.0'
 
 
+from copy import copy
+
+
 def dict_slice(dict_, keys, default_value=None, strict=False):
     """
     Returns a part of dictionary dict_ containing the keys
@@ -149,6 +152,48 @@ def weighted_choice(values_list, weights_list):
     for i, total in enumerate(totals):
         if rnd < total:
             return values_list[i]
+
+
+class LazyDict(dict):
+    """
+    A dict class with default value for unfound keys
+
+    >>> ldict = LazyDict(0)
+    >>> ldict
+    {}
+    >>> ldict['x'] += 1
+    >>> ldict
+    {'x': 1}
+    >>> ldict['x'] += 1
+    >>> ldict
+    {'x': 2}
+    >>> ldict['y'] += 10
+    >>> ldict == {'x': 2, 'y': 10}
+    True
+    >>> ldict['z'] == 0
+    True
+    >>> ldict == {'x': 2, 'y': 10, 'z': 0}
+    True
+    >>> ldict = LazyDict([])
+    >>> ldict
+    {}
+    >>> ldict['a'].append(20)
+    >>> ldict['a'].append(20)
+    >>> ldict
+    {'a': [20, 20]}
+    >>> ldict['b'].append(6)
+    >>> ldict == {'a': [20, 20], 'b': [6]}
+    True
+    """
+    def __init__(self, default_value):
+        super(LazyDict, self).__init__()
+        self._default_value = default_value
+
+    def __getitem__(self, item):
+        if not item in self:
+            self.__setitem__(item, copy(self._default_value))
+        return super(LazyDict, self).__getitem__(item)
+
 
 if __name__ == '__main__':
     import doctest
